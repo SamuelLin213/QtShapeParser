@@ -207,6 +207,9 @@ private slots:
     *******************************************************************/
     void remove();
 
+    //checks whether inputted id is valid
+    int checkId(int id_);
+
 private:
     canvas *renderArea;
     QPushButton *buttonContact;

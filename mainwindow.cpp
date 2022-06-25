@@ -4,6 +4,23 @@
 #include <QtWidgets>
 #include "canvas.h"
 
+int MainWindow::checkId(int id_)
+{
+    for(int i = 0; i < (int)(renderArea->shapeList.size()); i++)
+    {
+        if(renderArea->shapeList[i]->getId() == id_)
+        {
+
+            return i;
+        }
+    }
+    QMessageBox::information(
+        this,
+        tr("Error: Invalid ID"),
+        tr("The shape id inputted was not found. Please enter a valid ID.") );
+
+    return -1;
+}
 
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent)
@@ -127,70 +144,52 @@ void MainWindow::move()
     if(!ok)
         return;
 
-    while(changeId < 1 || changeId > 8)
-    {
-        QMessageBox::information(
-            this,
-            tr("Error: Invalid Input"),
-            tr("The shape id inputted is not valid. Please input an id between 1 and 8.") );
-        changeId = QInputDialog::getInt(this, tr("Move"),
-                                                tr("Select id of shape:"),
-                                                1, 1, 50, 1, &ok);
-        if(!ok)
-            return;
-    }
+    index = checkId(changeId);
 
-    for(int i = 0; i < (int)(renderArea->shapeList.size()); i++)
+    if(index != -1)
     {
-        if(renderArea->shapeList[i]->getId() == changeId)
+        if(renderArea->shapeList[index]->getShape() == Shape::LINE)
         {
-            index = i;
-            break;
+                points = 2;
         }
-    }
+        else if(renderArea->shapeList[index]->getShape() == Shape::POLYLINE || renderArea->shapeList[index]->getShape() == Shape::POLYGON)
+        {
+            points = QInputDialog::getInt(this, tr("Points"),
+                                       tr("Number of points to move(default 1):"),
+                                       1, 1, 50, 1, &ok);
+            if(!ok)
+                return;
+        }
 
-    if(renderArea->shapeList[index]->getShape() == Shape::LINE)
-    {
-            points = 2;
-    }
-    else if(renderArea->shapeList[index]->getShape() == Shape::POLYLINE || renderArea->shapeList[index]->getShape() == Shape::POLYGON)
-    {
-        points = QInputDialog::getInt(this, tr("Points"),
-                                   tr("Number of points to move(default 1):"),
-                                   1, 1, 50, 1, &ok);
-        if(!ok)
-            return;
-    }
+        for(int i = 1; i <= points; i++)
+        {
+            int newX = QInputDialog::getInt(this, tr("New Coordinates"),
+                                                 tr("New X:"),
+                                                 0, 0, 850, 1, &ok);
+            if(!ok)
+                return;
+            int newY = QInputDialog::getInt(this, tr("New Coordinates"),
+                                            tr("New Y:"),
+                                            0, 0, 475, 1, &ok);
+            if(!ok)
+                return;
+            coords.push_back(newX);
+            coords.push_back(newY);
+        }
 
-    for(int i = 1; i <= points; i++)
-    {
-        int newX = QInputDialog::getInt(this, tr("New Coordinates"),
-                                             tr("New X:"),
-                                             0, 0, 850, 1, &ok);
-        if(!ok)
-            return;
-        int newY = QInputDialog::getInt(this, tr("New Coordinates"),
-                                        tr("New Y:"),
-                                        0, 0, 475, 1, &ok);
-        if(!ok)
-            return;
-        coords.push_back(newX);
-        coords.push_back(newY);
-        //coords[numCoords] = {newX, newY};
+        //loops through vector and assigns dimensions to int array
+        int size = coords.size();
+        int coordAr[size];
+        for(int index = 0; index < size; index++)
+        {
+            coordAr[index] = coords[index];
+        }
+
+        //applies new coords
+        renderArea->shapeList[index]->move(coordAr);
+
+        renderArea->moveShape();
     }
-
-    //loops through vector and assigns dimensions to int array
-    int size = coords.size();
-    int coordAr[size];
-    for(int index = 0; index < size; index++)
-    {
-        coordAr[index] = coords[index];
-    }
-
-    //applies new coords
-    renderArea->shapeList[index]->move(coordAr);
-
-    renderArea->moveShape();
 }
 void MainWindow::remove()
 {
@@ -203,16 +202,12 @@ void MainWindow::remove()
       if(!ok)
           return;
 
-       //for loop finds id in vector and applies new coords
-      for(int i = 0; i < (int)(renderArea->shapeList.size()); i++)
+      int ind = checkId(selectId);
+      if(ind != -1)
       {
-          if(renderArea->shapeList[i]->getId() == selectId)
-          {
-              renderArea->shapeList.erase(renderArea->shapeList.begin() + i);
-              break;
-          }
+          renderArea->shapeList.erase(renderArea->shapeList.begin() + ind);
+          renderArea->removeShape();
       }
-    renderArea->removeShape();
 }
 void MainWindow::login()
 {

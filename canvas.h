@@ -184,6 +184,9 @@ public:
     *******************************************************************/
     QPainter* getPainter();
 
+    //checks whether inputted id is valid
+    int checkId(int id_);
+
     //myVector<Shape*> shapeList;
     std::vector<Shape*> shapeList;
 protected:

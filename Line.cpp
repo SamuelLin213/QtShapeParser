@@ -31,7 +31,6 @@ void Line::draw(QPainter* shape)
   shape->setBrush(getBrush());
   shape->drawLine(line); //draw a line based on previously set points
   shape->restore(); //restore to the original state of qpainter
-
 }
 
 void Line::move(int dims[])

@@ -10,6 +10,25 @@
 #include <QtDebug>
 #include <QFile>
 #include <iostream>
+#include <QMessageBox>
+
+//checks whether inputted id is valid
+int canvas::checkId(int id_)
+{
+    for(int i = 0; i < (int)(shapeList.size()); i++)
+    {
+        if(shapeList[i]->getId() == id_)
+        {
+            QMessageBox::information(
+                this,
+                tr("Error: Invalid ID"),
+                tr("The shape id inputted already exists. Please enter a unique ID."));
+            return i;
+        }
+    }
+
+    return -1;
+}
 
 canvas::canvas(QWidget *parent)
     : QWidget(parent)
@@ -22,7 +41,7 @@ canvas::canvas(QWidget *parent)
     setBackgroundRole(QPalette::Base);
     setAutoFillBackground(true);
 }
-void canvas::paintEvent(QPaintEvent *)
+void canvas::paintEvent(QPaintEvent *) //is called upon every update()
 {
     painter = new QPainter(this);
 
@@ -47,6 +66,11 @@ void canvas::drawLine()
                                       1, 1, 50, 1, &ok);
     if(!ok)
         return;
+
+    if(checkId(shapeId) != -1)
+    {
+        return;
+    }
 
     for(int i = 1; i <= 2; i++)
     {
@@ -92,6 +116,10 @@ void canvas::drawPolyline()
     if(!ok)
         return;
 
+    if(checkId(shapeId) != -1)
+    {
+        return;
+    }
 
     for(int i = 0; i < numPoints; i++)
     {
@@ -130,6 +158,12 @@ void canvas::drawPolygon()
                                       1, 1, 50, 1, &ok);
     if(!ok)
         return;
+
+    if(checkId(shapeId) != -1)
+    {
+        return;
+    }
+
     numPoints = QInputDialog::getInt(this, tr("Points"),
                                      tr("Number of points to move(default 1):"),
                                      1, 1, 50, 1, &ok);
@@ -173,6 +207,11 @@ void canvas::drawRectangle()
                                       1, 1, 50, 1, &ok);
     if(!ok)
         return;
+
+    if(checkId(shapeId) != -1)
+    {
+        return;
+    }
 
     int newX = QInputDialog::getInt(this, tr("New Coordinates"),
                                          tr("New X:"),
@@ -221,6 +260,11 @@ void canvas::drawSquare()
     if(!ok)
         return;
 
+    if(checkId(shapeId) != -1)
+    {
+        return;
+    }
+
     int newX = QInputDialog::getInt(this, tr("New Coordinates"),
                                          tr("New X:"),
                                          0, 0, 850, 1, &ok);
@@ -262,6 +306,11 @@ void canvas::drawEllipse()
                                       1, 1, 50, 1, &ok);
     if(!ok)
         return;
+
+    if(checkId(shapeId) != -1)
+    {
+        return;
+    }
 
     int newX = QInputDialog::getInt(this, tr("New Coordinates"),
                                          tr("New X:"),
@@ -310,6 +359,11 @@ void canvas::drawCircle()
     if(!ok)
         return;
 
+    if(checkId(shapeId) != -1)
+    {
+        return;
+    }
+
     int newX = QInputDialog::getInt(this, tr("New Coordinates"),
                                          tr("New X:"),
                                          0, 0, 850, 1, &ok);
@@ -352,6 +406,10 @@ void canvas::drawText()
     if(!ok)
         return;
 
+    if(checkId(shapeId) != -1)
+    {
+        return;
+    }
 
     int newX = QInputDialog::getInt(this, tr("New Coordinates"),
                                          tr("New X:"),
