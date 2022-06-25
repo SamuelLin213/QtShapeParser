@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>logo.png</file>
+        <file>shapes.txt</file>
+        <file>testimonies.txt</file>
+    </qresource>
+</RCC>
