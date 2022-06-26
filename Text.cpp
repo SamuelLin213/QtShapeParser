@@ -16,6 +16,12 @@ void Text::draw(QPainter* shape)
     shape->setPen(getPen());
     shape->setBrush(getBrush());
     shape->drawText(getDimensions()[0], getDimensions()[1], getDimensions()[2], getDimensions()[3], 0, text.toPlainText());
+
+    int xVal = getDimensions()[0];
+    int yVal = getDimensions()[1] + 30;
+
+    shape->drawText(xVal, yVal, QString::fromStdString("Shape Id: ") + QString::number(getId()));
+
     shape->restore(); //restore to the original state of qpainter
 }
 QFont Text::getFont()

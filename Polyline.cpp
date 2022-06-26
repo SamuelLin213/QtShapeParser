@@ -22,6 +22,24 @@ void Polyline::draw(QPainter* shape)
 
     shape->drawPolyline(points);
 
+    int xVal = points[0].x();
+    int yVal = points[0].y();
+
+    for(int x = 0; x < points.size(); x++)
+    {
+        if(points[x].x() < xVal)
+        {
+            xVal = points[x].x();
+        }
+        if(points[x].y() > yVal)
+        {
+            yVal = points[x].y();
+        }
+    }
+    yVal += 20;
+
+    shape->drawText(xVal, yVal, QString::fromStdString("Shape Id: ") + QString::number(getId()));
+
     shape->restore(); //restore to the original state of qpainter
 }
 void Polyline::move(int dims_[])

@@ -15,11 +15,26 @@ void Ellipse::draw(QPainter* shape)
     shape->setPen(getPen());
     shape->setBrush(getBrush());
 
+    int xVal, yVal;
+
     if(isCircle())
+    {
         shape->drawEllipse(getDimensions()[0],getDimensions()[1],getDimensions()[2],getDimensions()[2]);
+
+        xVal = getDimensions()[0];
+        yVal = getDimensions()[1] + getDimensions()[2] + 20;
+
+        shape->drawText(xVal, yVal, QString::fromStdString("Shape Id: ") + QString::number(getId()));
+    }
     else
+    {
         shape->drawEllipse(getDimensions()[0],getDimensions()[1],getDimensions()[2],getDimensions()[3]);
 
+        xVal = getDimensions()[0];
+        yVal = getDimensions()[1] + getDimensions()[3] + 20;
+
+        shape->drawText(xVal, yVal, QString::fromStdString("Shape Id: ") + QString::number(getId()));
+    }
     shape->restore(); //restore to the original state of qpainter
 }
 void Ellipse::move(int dims_[])

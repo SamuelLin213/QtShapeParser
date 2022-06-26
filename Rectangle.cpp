@@ -13,10 +13,23 @@ void Rectangle::draw(QPainter* shape)
     shape->setPen(getPen());
     shape->setBrush(getBrush());
     if(isSquare())
+    {
         shape->drawRect(getDimensions()[0],getDimensions()[1],getDimensions()[2],getDimensions()[2]);
+
+        int xVal = getDimensions()[0];
+        int yVal = getDimensions()[1] + getDimensions()[2] + 20;
+
+        shape->drawText(xVal, yVal, QString::fromStdString("Shape Id: ") + QString::number(getId()));
+    }
     else
+    {
         shape->drawRect(getDimensions()[0],getDimensions()[1],getDimensions()[2],getDimensions()[3]);
 
+        int xVal = getDimensions()[0];
+        int yVal = getDimensions()[1] + getDimensions()[3] + 20;
+
+        shape->drawText(xVal, yVal, QString::fromStdString("Shape Id: ") + QString::number(getId()));
+    }
     shape->restore(); //restore to the original state of qpainter
 }
 void Rectangle::move(int dims[])
